@@ -150,19 +150,23 @@ export class GatewayConnection extends EventEmitter {
       // Get VSCode version for client info
       const vscodeVersion = vscode.version || '1.0.0';
       
-      // Send connect request with the correct protocol format
-      // The client.mode MUST be "cli" according to the error message
+      // Send connect request with the Gateway protocol format.
       const response = await this.sendRequest('connect', {
-        minProtocol: 3,
-        maxProtocol: 3,
+        minProtocol: 4,
+        maxProtocol: 4,
         client: {
-          id: 'cli',
+          id: 'gateway-client',
           version: '1.0.0',
           platform: os.platform(),
-          mode: 'cli'  // Changed from 'vscode-extension' to 'cli'
+          mode: 'backend'  // Use backend client identity so Gateway preserves explicit operator scopes.
         },
-        role: "operator",
-        scopes: ["operator.read", "operator.write"],
+        scopes: [
+          'operator.admin',
+          'operator.read',
+          'operator.write',
+          'operator.approvals',
+          'operator.pairing'
+        ],
         auth: {
           token: this.authToken
         }

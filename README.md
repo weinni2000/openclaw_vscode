@@ -1,4 +1,4 @@
-# [OpenClaw VSCode Extension](https://github.com/Owen-Liuyuxuan/openclaw_vscode/releases/tag/v0.2.0)
+# [OpenClaw VSCode Extension NW Edition](https://github.com/Owen-Liuyuxuan/openclaw_vscode/releases/tag/v0.2.0)
 
 <div align="center">
   <img src="resources/readme_slogan.png" width="800"/>
