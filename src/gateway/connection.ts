@@ -7,6 +7,9 @@ import * as os from 'os';
 import { Logger } from '../utils/logger';
 import { MessageProcessor } from '../utils/messageProcessor';
 
+export const DEFAULT_GATEWAY_HOST = '127.0.0.1';
+export const DEFAULT_GATEWAY_PORT = 18789;
+
 interface PendingRequest {
   resolve: (value: any) => void;
   reject: (reason: any) => void;
@@ -22,7 +25,6 @@ export class GatewayConnection extends EventEmitter {
   private pendingRequests = new Map<string, PendingRequest>();
   private reconnectTimer: NodeJS.Timeout | null = null;
   private isConnecting = false;
-  private readonly GATEWAY_URL = 'ws://127.0.0.1:18789';
   private readonly MAX_RECONNECT_ATTEMPTS = 5;
   private reconnectAttempts = 0;
   private authToken: string | null = null;
@@ -78,7 +80,9 @@ export class GatewayConnection extends EventEmitter {
       this.logger.info('Connecting to OpenClaw Gateway...');
       
       return new Promise<boolean>((resolve) => {
-        this.ws = new WebSocket(this.GATEWAY_URL);
+        const gatewayUrl = this.getGatewayWebSocketUrl();
+        this.logger.info(`Connecting to OpenClaw Gateway at ${gatewayUrl}`);
+        this.ws = new WebSocket(gatewayUrl);
         
         this.ws.on('open', () => {
           this.logger.info('Connected to Gateway');
@@ -110,7 +114,7 @@ export class GatewayConnection extends EventEmitter {
         });
         
         this.ws.on('error', (error) => {
-          this.logger.error('WebSocket error', error);
+          this.logger.error(`WebSocket error while connecting to ${gatewayUrl}`, error);
           this.lastError = error;
           this.isConnecting = false;
           resolve(false);
@@ -139,6 +143,17 @@ export class GatewayConnection extends EventEmitter {
   }
 
   /**
+   * Get the Gateway WebSocket URL from VS Code settings.
+   */
+  public getGatewayWebSocketUrl(): string {
+    const config = vscode.workspace.getConfiguration('openclaw');
+    const host = config.get<string>('gatewayHost', DEFAULT_GATEWAY_HOST).trim();
+    const port = config.get<number>('gatewayPort', DEFAULT_GATEWAY_PORT);
+    const scheme = port === 443 ? 'wss' : 'ws';
+    return `${scheme}://${host}:${port}`;
+  }
+
+  /**
    * Send the initial connect request as required by the Gateway protocol
    */
   private async sendConnectRequest(): Promise<void> {
@@ -150,19 +165,23 @@ export class GatewayConnection extends EventEmitter {
       // Get VSCode version for client info
       const vscodeVersion = vscode.version || '1.0.0';
       
-      // Send connect request with the correct protocol format
-      // The client.mode MUST be "cli" according to the error message
+      // Send connect request with the Gateway protocol format.
       const response = await this.sendRequest('connect', {
-        minProtocol: 3,
-        maxProtocol: 3,
+        minProtocol: 4,
+        maxProtocol: 4,
         client: {
-          id: 'cli',
+          id: 'gateway-client',
           version: '1.0.0',
           platform: os.platform(),
-          mode: 'cli'  // Changed from 'vscode-extension' to 'cli'
+          mode: 'backend'  // Use backend client identity so Gateway preserves explicit operator scopes.
         },
-        role: "operator",
-        scopes: ["operator.read", "operator.write"],
+        scopes: [
+          'operator.admin',
+          'operator.read',
+          'operator.write',
+          'operator.approvals',
+          'operator.pairing'
+        ],
         auth: {
           token: this.authToken
         }
