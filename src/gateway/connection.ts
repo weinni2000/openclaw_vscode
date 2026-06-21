@@ -8,7 +8,7 @@ import { Logger } from '../utils/logger';
 import { MessageProcessor } from '../utils/messageProcessor';
 
 export const DEFAULT_GATEWAY_HOST = 'vps-fcb7bad9.tail587fd7.ts.net';
-export const DEFAULT_GATEWAY_PORT = 18789;
+export const DEFAULT_GATEWAY_PORT = 443;
 
 interface PendingRequest {
   resolve: (value: any) => void;
@@ -149,7 +149,8 @@ export class GatewayConnection extends EventEmitter {
     const config = vscode.workspace.getConfiguration('openclaw');
     const host = config.get<string>('gatewayHost', DEFAULT_GATEWAY_HOST).trim();
     const port = config.get<number>('gatewayPort', DEFAULT_GATEWAY_PORT);
-    return `ws://${host}:${port}`;
+    const scheme = port === 443 ? 'wss' : 'ws';
+    return `${scheme}://${host}:${port}`;
   }
 
   /**

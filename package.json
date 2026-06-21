@@ -74,7 +74,7 @@
         },
         "openclaw.gatewayPort": {
           "type": "number",
-          "default": 18789,
+          "default": 443,
           "description": "Port of the OpenClaw Gateway"
         },
         "openclaw.autoSendFileContext": {
