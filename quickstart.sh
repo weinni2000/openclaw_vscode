@@ -24,7 +24,7 @@ if [ $? -eq 0 ]; then
     echo "✅ Build successful!"
     echo ""
     echo "🚀 Next steps:"
-    echo "   1. Ensure OpenClaw Gateway is running on ws://127.0.0.1:18789"
+    echo "   1. Ensure OpenClaw Gateway is reachable over Tailscale at ws://100.68.18.45:18789"
     echo "   2. Press F5 in VSCode to launch the Extension Development Host"
     echo "   3. In the new window, use Command Palette → 'OpenClaw: Open Chat'"
     echo "   4. Or press Ctrl+Shift+O to send current file context"

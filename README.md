@@ -13,7 +13,7 @@
 
 ## Requirements
 
-- OpenClaw Gateway must be running on `ws://127.0.0.1:18789`
+- OpenClaw Gateway must be reachable over Tailscale at `ws://100.68.18.45:18789`
 - VSCode 1.85.0 or higher
 
 ## Installation

@@ -1,9 +1,13 @@
-npm install -g vsce
 
+
+npm run build
 vsce package
 
+
+
+Other:
+npm install -g vsce
 vsce publish
 
 
 
-npm run build
