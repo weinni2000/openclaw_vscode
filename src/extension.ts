@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { GatewayConnection } from './gateway/connection';
-import { DEFAULT_GATEWAY_HOST, DEFAULT_GATEWAY_PORT } from './gateway/connection';
 import { SessionManager } from './gateway/sessionManager';
 import { ChatViewProvider } from './ui/chatViewProvider';
 import { ChatPanel } from './ui/chatPanel';
@@ -45,16 +44,6 @@ async function activate(context: vscode.ExtensionContext) {
     registerSendFilePathCommand(context, gateway);
     registerShowLogsCommand(context);
 
-    context.subscriptions.push(
-        vscode.commands.registerCommand('openclaw.useNwGateway', async () => {
-            const config = vscode.workspace.getConfiguration('openclaw');
-            await config.update('gatewayHost', DEFAULT_GATEWAY_HOST, vscode.ConfigurationTarget.Global);
-            await config.update('gatewayPort', DEFAULT_GATEWAY_PORT, vscode.ConfigurationTarget.Global);
-            logger.info(`OpenClaw Gateway set to ${DEFAULT_GATEWAY_HOST}:${DEFAULT_GATEWAY_PORT}`);
-            vscode.window.showInformationMessage(`OpenClaw Gateway set to ${DEFAULT_GATEWAY_HOST}:${DEFAULT_GATEWAY_PORT}`);
-        })
-    );
-    
     // Register command to open chat panel
     context.subscriptions.push(
         vscode.commands.registerCommand('openclaw.openChat', () => {
@@ -69,10 +58,8 @@ async function activate(context: vscode.ExtensionContext) {
         if (connected) {
             logger.info('Connected to Gateway');
         } else {
-            const gatewayUrl = gateway.getGatewayWebSocketUrl();
-            const message = `Failed to connect to Gateway at ${gatewayUrl}`;
-            logger.error(message);
-            vscode.window.showErrorMessage(message);
+            logger.error('Failed to connect to Gateway');
+            vscode.window.showErrorMessage('OpenClaw: Failed to connect to Gateway');
         }
     } catch (error) {
         logger.error('Failed to connect to Gateway', error);
