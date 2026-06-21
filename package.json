@@ -2,7 +2,7 @@
   "name": "openclaw-vscode-nw-edition",
   "displayName": "OpenClaw-VSCode NW Edition",
   "description": "AI-powered coding assistant integration for OpenClaw NW Edition",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "publisher": "weinni2000",
   "icon": "resources/icon.png",
   "engines": {
