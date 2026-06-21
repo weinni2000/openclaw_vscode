@@ -178,6 +178,7 @@ export class GatewayConnection extends EventEmitter {
         scopes: [
           'operator.admin',
           'operator.read',
+          'operator.write',
           'operator.approvals',
           'operator.pairing'
         ],
