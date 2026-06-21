@@ -10,4 +10,6 @@ npm install -g vsce
 vsce publish
 
 
+openclaw gateway probe --url wss://vps-fcb7bad9.tail587fd7.ts.net --token d221f1f44fcbd0f23097329234f65aba6990a46b12872ac8 2>&1
+
 

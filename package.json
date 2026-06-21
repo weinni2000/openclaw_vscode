@@ -69,12 +69,12 @@
       "properties": {
         "openclaw.gatewayHost": {
           "type": "string",
-          "default": "vps-fcb7bad9.tail587fd7.ts.net",
+          "default": "127.0.0.1",
           "description": "Hostname or IP of the OpenClaw Gateway"
         },
         "openclaw.gatewayPort": {
           "type": "number",
-          "default": 443,
+          "default": 18789,
           "description": "Port of the OpenClaw Gateway"
         },
         "openclaw.autoSendFileContext": {

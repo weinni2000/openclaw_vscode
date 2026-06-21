@@ -7,8 +7,8 @@ import * as os from 'os';
 import { Logger } from '../utils/logger';
 import { MessageProcessor } from '../utils/messageProcessor';
 
-export const DEFAULT_GATEWAY_HOST = 'vps-fcb7bad9.tail587fd7.ts.net';
-export const DEFAULT_GATEWAY_PORT = 443;
+export const DEFAULT_GATEWAY_HOST = '127.0.0.1';
+export const DEFAULT_GATEWAY_PORT = 18789;
 
 interface PendingRequest {
   resolve: (value: any) => void;
